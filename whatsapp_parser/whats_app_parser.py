@@ -1,5 +1,6 @@
 from wordcloud import WordCloud, STOPWORDS
 import matplotlib.pyplot as plt
+from itertools import product
 from datetime import datetime
 import plotly_express as px
 from utils import Utils
@@ -244,6 +245,8 @@ class WhatsAppParser:
         self.chat_dataframe['time'] = self.chat_dataframe['timestamp'].dt.time
         self.chat_dataframe['hour'] = self.chat_dataframe['timestamp'].dt.hour
         self.chat_dataframe['weekday'] = pd.to_datetime(self.chat_dataframe['date']).dt.day_name()
+        day_mapping = {"Sunday": 1, "Monday": 2, "Tuesday": 3, "Wednesday": 4, "Thursday": 5, "Friday": 6, "Saturday": 7}
+        self.chat_dataframe['weekday_number'] = self.chat_dataframe['weekday'].map(day_mapping)
 
     def generate_graph_number_of_messages_per_day(self,
                                                   start_date: str = None,
@@ -708,20 +711,32 @@ class WhatsAppParser:
             (self.chat_dataframe['date'] >= start_date) & (self.chat_dataframe['date'] <= end_date)
         ]
 
-        # Group data by weekday and hour, calculate message count
-        activity_data = filtered_df.groupby(['weekday', 'hour']).size().reset_index(name='message_count')
+        # Generate all combinations of weekday numbers and hours
+        all_combinations = pd.DataFrame(list(product([1, 2, 3, 4, 5, 6, 7], map(str, range(24)))), columns=['weekday_number', 'hour'])
+        all_combinations['weekday_number'] = all_combinations['weekday_number'].astype(int)
+        all_combinations['hour'] = all_combinations['hour'].astype(int)
 
-        # Map weekday names to numbers and sort data
-        activity_data['weekday_number'] = activity_data['weekday'].apply(lambda x: texts['Graph_6']['labels']['weekdays'].index(x) + 1)
-        activity_data = activity_data.sort_values(by=['weekday_number', 'hour'], ascending=[True, True])
+        # Calculate message counts per weekday and hour
+        activity_data = filtered_df.groupby(['weekday_number', 'hour']).size().reset_index(name='message_count')
 
-        # Pivot data to create a matrix for the heatmap
-        activity_data = activity_data.pivot(index='weekday_number', columns='hour')['message_count'].fillna(0)
+        # Merge all combinations with actual data, filling missing values with zeros
+        result = pd.merge(all_combinations, activity_data, on=['weekday_number', 'hour'], how='left').fillna(0)
+        result.sort_values(by=['weekday_number', 'hour'], ascending=[True, True], inplace=True)
+
+        # Pivot the result to create a table with rows as weekday numbers, columns as hours, and values as message counts
+        pivot_df = result.pivot_table(values='message_count', index='weekday_number', columns='hour', aggfunc='mean')
+
+        # Map weekday numbers to weekday names using a dictionary
+        weekday_mapping = texts['Graph_6']['labels']['day_mapping']
+        weekday_mapping = {int(key): value for key, value in weekday_mapping.items()}
+        activity_data = pivot_df.rename(index=weekday_mapping)
 
         # Create the activity heatmap using Plotly Express
         fig = px.imshow(
             activity_data.values,
-            labels=dict(x="Hour of Day", y="Day of Week", color="Message Count"),
+            labels=dict(x=texts['Graph_6']['labels']['x'],
+                        y=texts['Graph_6']['labels']['y'],
+                        color=texts['Graph_6']['labels']['z'],),
             x=activity_data.columns,
             y=list(range(1, len(activity_data.index) + 1)),  # Convert to list
             color_continuous_scale='Greens',

@@ -41,7 +41,11 @@
     "Graph_6": {
         "title": "Activity Heatmap",
         "labels": {
-            "weekdays": ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+            "weekdays": ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+            "day_mapping": {"1": "Sunday", "2": "Monday", "3": "Tuesday", "4": "Wednesday", "5": "Thursday", "6": "Friday", "7": "Saturday"},
+            "x": "Hour",
+            "y": "Weekday",
+            "z": "Number of messages"
         }
     }
 }
