@@ -2,6 +2,9 @@
 *.png
 *.ipynb
 
+run.py
+
 chats/
 tests/
 __pycache__/
+.vscode/
