@@ -1,0 +1,7 @@
+*.html
+*.png
+*.ipynb
+
+chats/
+tests/
+__pycache__/
