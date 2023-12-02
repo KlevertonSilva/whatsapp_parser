@@ -34,6 +34,11 @@ if uploaded_file is not None:
         end_date = col2.date_input(texts['end_date'], chat.chat_dataframe['date'].max(), max_value=chat.chat_dataframe['date'].max(),
                                    min_value=chat.chat_dataframe['date'].min()).strftime('%Y-%m-%d')
 
+        # Button to reset dates in the third column
+        if col1.button(texts['reset_date']):
+            start_date = chat.chat_dataframe['date'].min().strftime('%Y-%m-%d')
+            end_date = chat.chat_dataframe['date'].max().strftime('%Y-%m-%d')
+
         if start_date > end_date:
             st.warning(texts['date_conflict'], icon="⚠️")
         else:

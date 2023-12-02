@@ -3,6 +3,7 @@
     "select_file": "Choose a .txt file",
     "start_date": "Start Date",
     "end_date": "End Date",
+    "reset_date": "Reset Dates",
     "date_conflict": "Please ensure that the Start Date is earlier than the End Date.",
     "Graph_1": {
         "title": "Number of messages per day",

@@ -120,7 +120,7 @@ class WhatsAppParser:
         result = {"timestamp": [], "who_sended": [], "message": [], "message_type": []}
 
         # Iterating over messages
-        for message in self.txt_file_list[1:]:  # [1:] First message is the cryptography message
+        for message in self.txt_file_list:
             message = message.replace('\u200e', '').replace('~\u202f', '')
             match = regex.match(message)
 
