@@ -452,6 +452,12 @@ class WhatsAppParser:
         df_d = filtered_df.groupby(by=["who_sended", "message_type"]).count()["message"]
         df_d = df_d.reset_index(drop=False)
 
+        # Calculate the total number of messages per user
+        total_messages_per_user = df_d.groupby('who_sended')['message'].sum().reset_index()
+
+        # Sort DataFrame based on the total number of messages in descending order
+        total_messages_per_user = total_messages_per_user.sort_values(by='message', ascending=False)
+
         # Create a bar graph using plotly express
         fig = px.bar(df_d, x="who_sended", y="message",
                      color='message_type',
@@ -464,8 +470,8 @@ class WhatsAppParser:
                      },
                      hover_name="message_type",
                      hover_data=["message"],
-                     category_orders={"message_type": ["Text", "Audio", "Foto", "Sticker", "Video", "GIF"]})  # Specify the order
-
+                     category_orders={"message_type": ["Text", "Audio", "Foto", "Sticker", "Video", "GIF"],
+                                      "who_sended": total_messages_per_user['who_sended'].tolist()})
         # Set marker colors for each message type
         try:
             offsetgroup_colors = {
