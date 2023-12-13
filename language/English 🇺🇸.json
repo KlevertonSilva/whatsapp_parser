@@ -1,6 +1,13 @@
 {
     "markdown": "## WhatsApp Chat Analyzer\n\nThis tool allows you to visualize and analyze your WhatsApp chat. To get started, follow these steps:\n\n1. **Export WhatsApp Chat:**\n   - Open your WhatsApp chat with the contact or group you want to analyze.\n   - Tap on the three dots in the top-right corner.\n   - Select \"More\" > \"Export chat.\"\n   - Choose \"Without Media\" to export only the text messages.\n\n2. **Upload Chat File:**\n   - Use the sidebar on the left to upload your exported chat file.\n   - Click on \"Choose a .txt file\" and select the exported text file.\n\n3. **Select Date Range:**\n   - Use the date inputs in the sidebar to select the date range for analysis.\n   - Choose the start and end dates using the provided date pickers.\n\n4. **Visualize Your Chat:**\n   - The tool will generate visualizations based on the selected date range.\n   - View the line graph showing the number of messages per day.\n\n**Note:** Make sure to upload the exported chat file in .txt format without media. If you have any issues or questions, feel free to reach out.\n\nEnjoy analyzing your WhatsApp chat!",
     "select_file": "Choose a .txt file",
+    "dataframe_columns": {
+        "timestamp": "Date and Time of Sending",
+        "who_sended": "Sender",
+        "message": "Message",
+        "message_type": "Message Type",
+        "weekday": "Weekday"
+    },
     "start_date": "Start Date",
     "end_date": "End Date",
     "reset_date": "Reset Dates",
@@ -48,5 +55,6 @@
             "y": "Weekday",
             "z": "Number of messages"
         }
-    }
+    },
+    "Download_excel_button": "Download chat in excel format"
 }

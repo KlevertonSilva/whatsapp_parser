@@ -1,6 +1,13 @@
 {
     "markdown": "## Analisador de Conversas do WhatsApp\n\nEsta ferramenta permite visualizar e analisar suas conversas do WhatsApp. Para começar, siga estas etapas:\n\n1. **Exportar Conversa do WhatsApp:**\n   - Abra a conversa do WhatsApp com o contato ou grupo que deseja analisar.\n   - Toque nos três pontos no canto superior direito.\n   - Selecione \"Mais\" > \"Exportar conversa\".\n   - Escolha \"Sem mídia\" para exportar apenas as mensagens de texto.\n\n2. **Enviar Arquivo da Conversa:**\n   - Use a barra lateral à esquerda para enviar o arquivo de conversa exportado.\n   - Clique em \"Escolher um arquivo .txt\" e selecione o arquivo de texto exportado.\n\n3. **Selecionar Intervalo de Datas:**\n   - Use as entradas de data na barra lateral para selecionar o intervalo de datas para análise.\n   - Escolha as datas de início e fim usando os seletores de data fornecidos.\n\n4. **Visualizar Sua Conversa:**\n   - A ferramenta gerará visualizações com base no intervalo de datas selecionado.\n   - Veja o gráfico de linhas mostrando o número de mensagens por dia.\n\n**Observação:** Certifique-se de enviar o arquivo de conversa exportado no formato .txt sem mídia. Se tiver algum problema ou dúvida, não hesite em entrar em contato.\n\nAproveite a análise de sua conversa no WhatsApp!",
     "select_file": "Escolha um arquivo .txt",
+    "dataframe_columns": {
+        "timestamp": "Data e Hora de Envio",
+        "who_sended": "Remetente",
+        "message": "Mensagem",
+        "message_type": "Tipo de Mensagem",
+        "weekday": "Dia da Semana"
+    },
     "start_date": "Data Inicial",
     "end_date": "Data Final",
     "reset_date": "Resetar datas",
@@ -48,5 +55,6 @@
             "y": "Horario",
             "z": "Média de mensagens"
         }
-    }
+    },
+    "Download_excel_button": "Baixar conversa em excel"
 }

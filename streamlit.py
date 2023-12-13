@@ -1,5 +1,6 @@
 from whatsapp_parser.whats_app_parser import WhatsAppParser
 from utils import Utils
+from io import BytesIO
 import streamlit as st
 import tempfile
 import os
@@ -24,6 +25,19 @@ if uploaded_file is not None:
     os.remove(temp_file_path)
 
     if chat:
+        # Save DataFrame to BytesIO buffer
+        excel_buffer = BytesIO()
+        chat.chat_dataframe.to_excel(excel_buffer, index=False, engine='xlsxwriter')
+        excel_buffer.seek(0)
+
+        # Create a download button
+        st.sidebar.download_button(
+            label=texts['Download_excel_button'],
+            data=excel_buffer.read(),
+            file_name=chat.excel_file_name,
+            key='download_button'
+        )
+
         col1, col2 = st.columns(2)
 
         # Date input for start_date in the first column
@@ -33,6 +47,11 @@ if uploaded_file is not None:
         # Date input for end_date in the second column
         end_date = col2.date_input(texts['end_date'], chat.chat_dataframe['date'].max(), max_value=chat.chat_dataframe['date'].max(),
                                    min_value=chat.chat_dataframe['date'].min()).strftime('%Y-%m-%d')
+
+        df_display = chat.display_dataframe(start_date=start_date,
+                                            end_date=end_date,
+                                            language=language)
+        st.dataframe(df_display.set_index(texts['dataframe_columns']['timestamp']), height=200)
 
         # Button to reset dates in the third column
         if col1.button(texts['reset_date']):
@@ -71,6 +90,3 @@ if uploaded_file is not None:
                                                   end_date=end_date,
                                                   language=language).update_layout(height=400, width=1000)
             st.plotly_chart(fig6, theme="streamlit")
-
-            # fig7 = chat.generate_word_cloud(save_as_file=False)
-            # st.image(fig7)

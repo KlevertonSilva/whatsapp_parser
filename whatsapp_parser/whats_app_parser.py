@@ -488,8 +488,7 @@ class WhatsAppParser:
                 if offsetgroup in offsetgroup_colors:
                     entry['marker']['color'] = offsetgroup_colors[offsetgroup]
 
-        except Exception:
-            pass
+        except Exception: pass
 
         # Save the graph as an HTML file if save_as_file is True
         if not save_as_file: return fig
@@ -819,3 +818,25 @@ class WhatsAppParser:
         # Count occurrences of the word in the 'message' column for each person
         word_counts_by_person = self.chat_dataframe.groupby('who_sended')['message'].apply(lambda x: x.str.lower().str.count(word.lower()).sum())
         return pd.DataFrame(word_counts_by_person).reset_index().sort_values(by=['message'], ascending=False)
+
+    def display_dataframe(self,
+                          language: str = 'English 🇺🇸',
+                          start_date: str = None,
+                          end_date: str = None):
+
+        texts = Utils.read_language_files(language)
+        if start_date and end_date:
+            start_date = datetime.strptime(start_date, '%Y-%m-%d').date()
+            end_date = datetime.strptime(end_date, '%Y-%m-%d').date()
+        elif end_date:
+            end_date = datetime.strptime(end_date, '%Y-%m-%d').date()
+            start_date = self.chat_dataframe['date'].min()
+        else:
+            start_date = self.chat_dataframe['date'].min()
+            end_date = self.chat_dataframe['date'].max()
+
+        filtered_df = self.chat_dataframe[
+            (self.chat_dataframe['date'] >= start_date) & (self.chat_dataframe['date'] <= end_date)
+        ]
+
+        return filtered_df[['timestamp', 'who_sended', 'message', 'message_type', 'weekday']].rename(columns=texts['dataframe_columns'])
