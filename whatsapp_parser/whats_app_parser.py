@@ -1,7 +1,6 @@
 from wordcloud import WordCloud, STOPWORDS
 import matplotlib.pyplot as plt
 from itertools import product
-from datetime import datetime
 import plotly_express as px
 from utils import Utils
 import pandas as pd
@@ -278,21 +277,7 @@ class WhatsAppParser:
         texts = Utils.read_language_files(language)
         if not title: title = texts['Graph_1']['title']
         if not file_name: file_name = '# of messages per day'
-
-        # Filter chat DataFrame based on date range
-        if start_date and end_date:
-            start_date = datetime.strptime(start_date, '%Y-%m-%d').date()
-            end_date = datetime.strptime(end_date, '%Y-%m-%d').date()
-        elif end_date:
-            end_date = datetime.strptime(end_date, '%Y-%m-%d').date()
-            start_date = self.chat_dataframe['date'].min()
-        else:
-            start_date = self.chat_dataframe['date'].min()
-            end_date = self.chat_dataframe['date'].max()
-
-        filtered_df = self.chat_dataframe[
-            (self.chat_dataframe['date'] >= start_date) & (self.chat_dataframe['date'] <= end_date)
-        ]
+        filtered_df = Utils.check_and_apply_filter_dates(start_date, end_date, self.chat_dataframe)
 
         # Group filtered chat DataFrame by date and sender, count the number of messages
         chat_df_grouped = filtered_df.groupby(by=["date", "who_sended"], sort=False).count()['message']
@@ -348,21 +333,7 @@ class WhatsAppParser:
         texts = Utils.read_language_files(language)
         if not title: title = texts['Graph_2']['title']
         if not file_name: file_name = '# of type of message'
-
-        # Filter chat DataFrame based on date range
-        if start_date and end_date:
-            start_date = datetime.strptime(start_date, '%Y-%m-%d').date()
-            end_date = datetime.strptime(end_date, '%Y-%m-%d').date()
-        elif end_date:
-            end_date = datetime.strptime(end_date, '%Y-%m-%d').date()
-            start_date = self.chat_dataframe['date'].min()
-        else:
-            start_date = self.chat_dataframe['date'].min()
-            end_date = self.chat_dataframe['date'].max()
-
-        filtered_df = self.chat_dataframe[
-            (self.chat_dataframe['date'] >= start_date) & (self.chat_dataframe['date'] <= end_date)
-        ]
+        filtered_df = Utils.check_and_apply_filter_dates(start_date, end_date, self.chat_dataframe)
 
         # Group chat DataFrame by message type and count the number of messages
         chat_df_grouped = filtered_df.groupby(by=['message_type']).count()['message']
@@ -432,21 +403,7 @@ class WhatsAppParser:
         texts = Utils.read_language_files(language)
         if not title: title = texts['Graph_3']['title']
         if not file_name: file_name = '# of type of message per user'
-
-        # Filter chat DataFrame based on date range
-        if start_date and end_date:
-            start_date = datetime.strptime(start_date, '%Y-%m-%d').date()
-            end_date = datetime.strptime(end_date, '%Y-%m-%d').date()
-        elif end_date:
-            end_date = datetime.strptime(end_date, '%Y-%m-%d').date()
-            start_date = self.chat_dataframe['date'].min()
-        else:
-            start_date = self.chat_dataframe['date'].min()
-            end_date = self.chat_dataframe['date'].max()
-
-        filtered_df = self.chat_dataframe[
-            (self.chat_dataframe['date'] >= start_date) & (self.chat_dataframe['date'] <= end_date)
-        ]
+        filtered_df = Utils.check_and_apply_filter_dates(start_date, end_date, self.chat_dataframe)
 
         # Group chat DataFrame by sender and message type, count the number of messages
         df_d = filtered_df.groupby(by=["who_sended", "message_type"]).count()["message"]
@@ -520,21 +477,7 @@ class WhatsAppParser:
         texts = Utils.read_language_files(language)
         if not title: title = texts['Graph_4']['title']
         if not file_name: file_name = '# of messages per hour'
-
-        # Filter chat DataFrame based on date range
-        if start_date and end_date:
-            start_date = datetime.strptime(start_date, '%Y-%m-%d').date()
-            end_date = datetime.strptime(end_date, '%Y-%m-%d').date()
-        elif end_date:
-            end_date = datetime.strptime(end_date, '%Y-%m-%d').date()
-            start_date = self.chat_dataframe['date'].min()
-        else:
-            start_date = self.chat_dataframe['date'].min()
-            end_date = self.chat_dataframe['date'].max()
-
-        filtered_df = self.chat_dataframe[
-            (self.chat_dataframe['date'] >= start_date) & (self.chat_dataframe['date'] <= end_date)
-        ]
+        filtered_df = Utils.check_and_apply_filter_dates(start_date, end_date, self.chat_dataframe)
 
         # Group chat DataFrame by hour and count the number of messages
         df_d = filtered_df.groupby(by=["hour"]).count()['message']
@@ -646,21 +589,7 @@ class WhatsAppParser:
         texts = Utils.read_language_files(language)
         if not title: title = texts['Graph_5']['title']
         if not file_name: file_name = '# of messages per user'
-
-        # Filter chat DataFrame based on date range
-        if start_date and end_date:
-            start_date = datetime.strptime(start_date, '%Y-%m-%d').date()
-            end_date = datetime.strptime(end_date, '%Y-%m-%d').date()
-        elif end_date:
-            end_date = datetime.strptime(end_date, '%Y-%m-%d').date()
-            start_date = self.chat_dataframe['date'].min()
-        else:
-            start_date = self.chat_dataframe['date'].min()
-            end_date = self.chat_dataframe['date'].max()
-
-        filtered_df = self.chat_dataframe[
-            (self.chat_dataframe['date'] >= start_date) & (self.chat_dataframe['date'] <= end_date)
-        ]
+        filtered_df = Utils.check_and_apply_filter_dates(start_date, end_date, self.chat_dataframe)
 
         # Count the number of messages per user
         message_counts = filtered_df['who_sended'].value_counts()
@@ -704,21 +633,7 @@ class WhatsAppParser:
         texts = Utils.read_language_files(language)
         if not title: title = texts['Graph_6']['title']
         if not file_name: file_name = 'Activity Heatmap'
-
-        # Filter chat DataFrame based on date range
-        if start_date and end_date:
-            start_date = datetime.strptime(start_date, '%Y-%m-%d').date()
-            end_date = datetime.strptime(end_date, '%Y-%m-%d').date()
-        elif end_date:
-            end_date = datetime.strptime(end_date, '%Y-%m-%d').date()
-            start_date = self.chat_dataframe['date'].min()
-        else:
-            start_date = self.chat_dataframe['date'].min()
-            end_date = self.chat_dataframe['date'].max()
-
-        filtered_df = self.chat_dataframe[
-            (self.chat_dataframe['date'] >= start_date) & (self.chat_dataframe['date'] <= end_date)
-        ]
+        filtered_df = Utils.check_and_apply_filter_dates(start_date, end_date, self.chat_dataframe)
 
         # Generate all combinations of weekday numbers and hours
         all_combinations = pd.DataFrame(list(product([1, 2, 3, 4, 5, 6, 7], map(str, range(24)))), columns=['weekday_number', 'hour'])
@@ -825,18 +740,6 @@ class WhatsAppParser:
                           end_date: str = None):
 
         texts = Utils.read_language_files(language)
-        if start_date and end_date:
-            start_date = datetime.strptime(start_date, '%Y-%m-%d').date()
-            end_date = datetime.strptime(end_date, '%Y-%m-%d').date()
-        elif end_date:
-            end_date = datetime.strptime(end_date, '%Y-%m-%d').date()
-            start_date = self.chat_dataframe['date'].min()
-        else:
-            start_date = self.chat_dataframe['date'].min()
-            end_date = self.chat_dataframe['date'].max()
-
-        filtered_df = self.chat_dataframe[
-            (self.chat_dataframe['date'] >= start_date) & (self.chat_dataframe['date'] <= end_date)
-        ]
+        filtered_df = Utils.check_and_apply_filter_dates(start_date, end_date, self.chat_dataframe)
 
         return filtered_df[['timestamp', 'who_sended', 'message', 'message_type', 'weekday']].rename(columns=texts['dataframe_columns'])
