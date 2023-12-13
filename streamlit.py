@@ -25,18 +25,6 @@ if uploaded_file is not None:
     os.remove(temp_file_path)
 
     if chat:
-        # Save DataFrame to BytesIO buffer
-        excel_buffer = BytesIO()
-        chat.chat_dataframe.to_excel(excel_buffer, index=False, engine='xlsxwriter')
-        excel_buffer.seek(0)
-
-        # Create a download button
-        st.sidebar.download_button(
-            label=texts['Download_excel_button'],
-            data=excel_buffer.read(),
-            file_name=chat.excel_file_name,
-            key='download_button'
-        )
 
         col1, col2 = st.columns(2)
 
@@ -90,3 +78,16 @@ if uploaded_file is not None:
                                                   end_date=end_date,
                                                   language=language).update_layout(height=400, width=1000)
             st.plotly_chart(fig6, theme="streamlit")
+
+            # Save DataFrame to BytesIO buffer
+            excel_buffer = BytesIO()
+            chat.chat_dataframe.to_excel(excel_buffer, index=False, engine='xlsxwriter')
+            excel_buffer.seek(0)
+
+            # Create a download button
+            st.sidebar.download_button(
+                label=texts['Download_excel_button'],
+                data=excel_buffer.read(),
+                file_name=chat.excel_file_name,
+                key='download_button'
+            )
