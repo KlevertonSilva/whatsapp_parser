@@ -80,6 +80,15 @@ class WhatsAppParser:
             'não', 'sim', 'se', 'mano',
             'ta', 'tá', 'só', 'é', 'tem'
         ]
+        self.weekdays_translation = {
+            'Monday': 'Segunda-feira',
+            'Tuesday': 'Terça-feira',
+            'Wednesday': 'Quarta-feira',
+            'Thursday': 'Quinta-feira',
+            'Friday': 'Sexta-feira',
+            'Saturday': 'Sábado',
+            'Sunday': 'Domingo'
+        }
 
     def _txt_file_to_list(self,
                           file: str
@@ -747,5 +756,6 @@ class WhatsAppParser:
 
         texts = Utils.read_language_files(language)
         filtered_df = Utils.check_and_apply_filter_dates(start_date, end_date, self.chat_dataframe)
+        if language == 'Português 🇧🇷': filtered_df['weekday'] = filtered_df['weekday'].map(self.weekdays_translation)
 
         return filtered_df[['timestamp', 'who_sended', 'message', 'message_type', 'weekday']].rename(columns=texts['dataframe_columns'])
