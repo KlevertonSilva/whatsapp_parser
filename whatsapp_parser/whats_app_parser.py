@@ -299,6 +299,11 @@ class WhatsAppParser:
                       color='who_sended',
                       color_discrete_sequence=[self.hex[f'main_wpp_{i}'] for i in range(1, 6)])
 
+        # Set line colors and update layout
+        if not self.group_chat:
+            fig['data'][1]['line']['color'] = self.hex['main_wpp_1']
+            fig['data'][0]['line']['color'] = self.hex['main_wpp_5']
+
         # Save the graph as an HTML file if save_as_file is True
         if not save_as_file: return fig
 
@@ -595,11 +600,13 @@ class WhatsAppParser:
         # Count the number of messages per user
         message_counts = filtered_df['who_sended'].value_counts()
 
+        group = [self.hex[f'main_wpp_{i}'] for i in range(1, 6)]
+        not_group = [self.hex['main_wpp_1'], self.hex['main_wpp_5']]
         fig = px.pie(
             names=message_counts.index,
             values=message_counts,
             title=title,
-            color_discrete_sequence=[self.hex[f'main_wpp_{i}'] for i in range(1, 6)]
+            color_discrete_sequence=group if self.group_chat else not_group
         )
 
         # Save the pie chart as an HTML file if save_as_file is True
