@@ -296,12 +296,8 @@ class WhatsAppParser:
                           'message': texts['Graph_1']['labels']["2"],
                       },
                       category_orders={'date': new_order},
-                      color='who_sended')
-
-        # Set line colors and update layout
-        if not self.group_chat:
-            fig['data'][1]['line']['color'] = self.hex['main_wpp_1']
-            fig['data'][0]['line']['color'] = self.hex['main_wpp_5']
+                      color='who_sended',
+                      color_discrete_sequence=[self.hex[f'main_wpp_{i}'] for i in range(1, 6)])
 
         # Save the graph as an HTML file if save_as_file is True
         if not save_as_file: return fig
@@ -599,13 +595,11 @@ class WhatsAppParser:
         # Count the number of messages per user
         message_counts = filtered_df['who_sended'].value_counts()
 
-        # Define custom colors for the pie chart
-
-        # Create a pie chart using plotly express
         fig = px.pie(
             names=message_counts.index,
             values=message_counts,
-            title=title
+            title=title,
+            color_discrete_sequence=[self.hex[f'main_wpp_{i}'] for i in range(1, 6)]
         )
 
         # Save the pie chart as an HTML file if save_as_file is True
