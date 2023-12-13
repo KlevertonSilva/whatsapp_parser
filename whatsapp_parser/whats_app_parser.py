@@ -479,9 +479,14 @@ class WhatsAppParser:
         if not file_name: file_name = '# of messages per hour'
         filtered_df = Utils.check_and_apply_filter_dates(start_date, end_date, self.chat_dataframe)
 
-        # Group chat DataFrame by hour and count the number of messages
-        df_d = filtered_df.groupby(by=["hour"]).count()['message']
-        df_d = df_d.reset_index(drop=False)
+        # Create a DataFrame with all hours
+        all_hours_df = pd.DataFrame({'hour': range(24)})
+
+        # Merge with your current DataFrame to fill missing hours with 0 messages
+        df_d = pd.merge(all_hours_df, filtered_df.groupby(by=["hour"]).count()['message'].reset_index(),
+                        how='left', on='hour').fillna(0)
+
+        # Sort the DataFrame by hour
         df_d = df_d.sort_values('hour', ascending=True)
 
         # Create a bar graph using plotly express
@@ -495,7 +500,7 @@ class WhatsAppParser:
                      },
                      color_continuous_scale='Greens')
 
-        # # Update trace properties and layout
+        # Update trace properties and layout
         fig.update_traces(texttemplate='', textposition='outside')
 
         fig.update_xaxes(
