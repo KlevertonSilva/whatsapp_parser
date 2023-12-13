@@ -74,6 +74,16 @@ if uploaded_file is not None:
             fig2 = chat.generate_graph_number_of_types_of_messages(start_date=start_date, end_date=end_date, language=language)
             st.plotly_chart(fig2, theme="streamlit", use_container_width=True)
 
+            # Search word per person
+            st.write(texts['count_word_occurrences_by_person']['title'])
+            text_search = st.text_input(texts['count_word_occurrences_by_person']['sub_title'], texts['count_word_occurrences_by_person']['default'])
+            df = chat.count_word_occurrences_by_person(text_search)
+            df.columns = texts['count_word_occurrences_by_person']['columns']
+            styler = df.style.bar(subset=texts['count_word_occurrences_by_person']['columns'][1],
+                                  align='mid',
+                                  color=chat.hex['main_wpp_1'])
+            st.write(styler.to_html(), unsafe_allow_html=True)
+
             # Structure for excel download
             excel_buffer = BytesIO()
             chat.chat_dataframe.to_excel(excel_buffer, index=False, engine='xlsxwriter')

@@ -56,5 +56,11 @@
             "z": "Number of messages"
         }
     },
-    "Download_excel_button": "Download chat in excel format"
+    "Download_excel_button": "Download chat in excel format",
+    "count_word_occurrences_by_person": {
+        "title": "List of frequency of use of a specific word",
+        "sub_title": "Search box",
+        "default": "Good morning",
+        "columns": ["Sender", "Amount of times sent"]
+    }
 }

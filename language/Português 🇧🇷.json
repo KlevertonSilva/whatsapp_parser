@@ -56,5 +56,11 @@
             "z": "Média de mensagens"
         }
     },
-    "Download_excel_button": "Baixar conversa em excel"
+    "Download_excel_button": "Baixar conversa em excel",
+    "count_word_occurrences_by_person": {
+        "title": "Lista de frequência do uso de uma palavra específica",
+        "sub_title": "Buscar",
+        "default": "Bom dia",
+        "columns": ["Quem enviou", "Qtd de vezes"]
+    }
 }
