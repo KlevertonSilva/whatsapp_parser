@@ -787,7 +787,7 @@ class WhatsAppParser:
         return self.chat_dataframe['message'].str.lower().str.count(word.lower()).sum()
 
     def count_word_occurrences_by_person(self,
-                                         word: str) -> dict:
+                                         word: str) -> pd.DataFrame:
         """
         Count the occurrences of a word in the 'message' column of the WhatsApp conversation data for each person.
 
@@ -795,14 +795,18 @@ class WhatsAppParser:
         - word (str): The word to count occurrences for.
 
         Returns:
-        - dict: A dictionary where keys are usernames and values are the number of occurrences of the word.
+        - pd.DataFrame: A dataframe where the index (username) starts from 1 and values are the number of occurrences of the word.
         """
         # Ensure 'message' column is of type string
         self.chat_dataframe['message'] = self.chat_dataframe['message'].astype(str)
 
         # Count occurrences of the word in the 'message' column for each person
         word_counts_by_person = self.chat_dataframe.groupby('who_sended')['message'].apply(lambda x: x.str.lower().str.count(word.lower()).sum())
-        return pd.DataFrame(word_counts_by_person).reset_index().sort_values(by=['message'], ascending=False)
+
+        # Reset index starting from 1
+        result_df = pd.DataFrame(word_counts_by_person).sort_values(by=['message'], ascending=False).reset_index()
+        result_df.index += 1  # Add 1 to the index
+        return result_df
 
     def display_dataframe(self,
                           language: str = 'English 🇺🇸',
