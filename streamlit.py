@@ -24,8 +24,8 @@ if uploaded_file is not None:
     # Clean up the temporary file
     os.remove(temp_file_path)
 
+    # File was uploaded
     if chat:
-
         col1, col2 = st.columns(2)
 
         # Date input for start_date in the first column
@@ -36,6 +36,7 @@ if uploaded_file is not None:
         end_date = col2.date_input(texts['end_date'], chat.chat_dataframe['date'].max(), max_value=chat.chat_dataframe['date'].max(),
                                    min_value=chat.chat_dataframe['date'].min()).strftime('%Y-%m-%d')
 
+        # Displaying dataframe
         df_display = chat.display_dataframe(start_date=start_date,
                                             end_date=end_date,
                                             language=language)
@@ -49,41 +50,34 @@ if uploaded_file is not None:
         if start_date > end_date:
             st.warning(texts['date_conflict'], icon="⚠️")
         else:
-            fig1 = chat.generate_graph_number_of_messages_per_day(start_date=start_date,
-                                                                  end_date=end_date,
-                                                                  language=language).update_layout(width=1000)
-            st.plotly_chart(fig1, theme="streamlit")
-
-            fig2 = chat.generate_graph_number_of_types_of_messages(start_date=start_date,
-                                                                   end_date=end_date,
-                                                                   language=language)
-            st.plotly_chart(fig2, theme="streamlit", use_container_width=True)
-
-            fig3 = chat.generate_graph_number_of_types_of_messages_per_user(start_date=start_date,
-                                                                            end_date=end_date,
-                                                                            language=language)
-            st.plotly_chart(fig3, theme="streamlit", use_container_width=True)
-
-            fig4 = chat.generate_graph_number_of_messages_per_hour(start_date=start_date,
-                                                                   end_date=end_date,
-                                                                   language=language)
-            st.plotly_chart(fig4, theme="streamlit", use_container_width=True)
-
-            fig5 = chat.generate_number_of_messages_per_user(start_date=start_date,
-                                                             end_date=end_date,
-                                                             language=language)
-            st.plotly_chart(fig5, theme="streamlit", use_container_width=True)
-
-            fig6 = chat.generate_activity_heatmap(start_date=start_date,
-                                                  end_date=end_date,
-                                                  language=language).update_layout(height=400, width=1000)
+            # Activity Heatmap
+            fig6 = chat.generate_activity_heatmap(start_date=start_date, end_date=end_date, language=language).update_layout(height=400, width=1000)
             st.plotly_chart(fig6, theme="streamlit")
 
-            # Save DataFrame to BytesIO buffer
+            # Number of messages per hour
+            fig4 = chat.generate_graph_number_of_messages_per_hour(start_date=start_date, end_date=end_date, language=language)
+            st.plotly_chart(fig4, theme="streamlit", use_container_width=True)
+
+            # Number of messages per day
+            fig1 = chat.generate_graph_number_of_messages_per_day(start_date=start_date, end_date=end_date, language=language).update_layout(width=1000)
+            st.plotly_chart(fig1, theme="streamlit")
+
+            # Number from type of messages per user
+            fig3 = chat.generate_graph_number_of_types_of_messages_per_user(start_date=start_date, end_date=end_date, language=language)
+            st.plotly_chart(fig3, theme="streamlit", use_container_width=True)
+
+            # Number of messages per user
+            fig5 = chat.generate_number_of_messages_per_user(start_date=start_date, end_date=end_date, language=language)
+            st.plotly_chart(fig5, theme="streamlit", use_container_width=True)
+
+            # Number from type of messages
+            fig2 = chat.generate_graph_number_of_types_of_messages(start_date=start_date, end_date=end_date, language=language)
+            st.plotly_chart(fig2, theme="streamlit", use_container_width=True)
+
+            # Structure for excel download
             excel_buffer = BytesIO()
             chat.chat_dataframe.to_excel(excel_buffer, index=False, engine='xlsxwriter')
             excel_buffer.seek(0)
-
             # Create a download button
             st.sidebar.download_button(
                 label=texts['Download_excel_button'],
