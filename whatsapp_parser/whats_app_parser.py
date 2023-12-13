@@ -714,6 +714,61 @@ class WhatsAppParser:
         self._create_graphs_folder()
         fig.write_html(f"{self._folder_name}/{file_name}.html")
 
+    def generate_first_last_message(self,
+                                    save_as_file: bool = False,
+                                    title: str = None,
+                                    file_name: str = None,
+                                    language: str = 'English 🇺🇸',
+                                    start_date: str = None,
+                                    end_date: str = None,
+                                    ) -> plotly.graph_objs._figure.Figure:
+        """
+        Generates a grouped bar chart comparing the counts of first and last messages sent by each user.
+
+        Parameters:
+        - save_as_file (bool, optional): If True, saves the chart as an HTML file.
+        - title (str, optional): Title of the grouped bar chart.
+        - file_name (str, optional): Name of the HTML file if save_as_file is True.
+        - language (str, optional): Language for localization. Default is 'English 🇺🇸'.
+        - start_date (str, optional): Start date for filtering the data.
+        - end_date (str, optional): End date for filtering the data.
+
+        Returns:
+        - plotly.graph_objs._figure.Figure: The generated grouped bar chart.
+        """
+
+        # Set default values for title and file_name if not provided
+        texts = Utils.read_language_files(language)
+        if not title: title = texts['Graph_7']['title']
+        if not file_name: file_name = 'Comparison_of_First_and_Last_Messages_Count'
+        filtered_df = Utils.check_and_apply_filter_dates(start_date, end_date, self.chat_dataframe)
+
+        first_message_users = filtered_df.groupby(['date']).agg({'who_sended': 'first'})
+        user_counts = first_message_users['who_sended'].value_counts()
+        first_messages_df = pd.DataFrame({'user': user_counts.index, texts['Graph_7']['dataframe_columns']['first']: user_counts.values})
+
+        last_message_users = filtered_df.groupby(['date']).agg({'who_sended': 'last'})
+        user_counts = last_message_users['who_sended'].value_counts()
+        last_messages_df = pd.DataFrame({'user': user_counts.index, texts['Graph_7']['dataframe_columns']['last']: user_counts.values})
+
+        # Merge the two DataFrames on the 'user' column
+        merged_df = pd.merge(first_messages_df, last_messages_df, on='user', suffixes=('_first', '_last'))
+        fig = px.bar(merged_df, x='user', y=[texts['Graph_7']['dataframe_columns']['first'], texts['Graph_7']['dataframe_columns']['last']],
+                     labels={texts['Graph_7']['dataframe_columns']['first']: 'First Messages', texts['Graph_7']['dataframe_columns']['last']: 'Last Messages'},
+                     title=title,
+                     color_discrete_map={texts['Graph_7']['dataframe_columns']['first']: self.hex['main_wpp_5'],
+                                         texts['Graph_7']['dataframe_columns']['last']: self.hex['main_wpp_1']})
+
+        fig.update_layout(barmode='group',
+                          xaxis_title=texts['Graph_7']['labels']['xaxis_title'],
+                          yaxis_title=texts['Graph_7']['labels']['yaxis_title'],
+                          legend_title=texts['Graph_7']['labels']['legend_title'])
+
+        if not save_as_file: return fig
+
+        self._create_graphs_folder()
+        fig.write_html(f"{self._folder_name}/{file_name}.html")
+
     def count_word_occurrences(self,
                                word: str) -> int:
         """

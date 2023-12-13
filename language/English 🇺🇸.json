@@ -56,6 +56,18 @@
             "z": "Number of messages"
         }
     },
+    "Graph_7": {
+        "title": "Comparison of First and Last Messages Count",
+        "labels": {
+            "xaxis_title": "Users",
+            "yaxis_title": "Message Count",
+            "legend_title": "Message Type"
+        },
+        "dataframe_columns": {
+            "first": "First message of the day",
+            "last": "Last message of the day"
+        }
+    },
     "Download_excel_button": "Download chat in excel format",
     "count_word_occurrences_by_person": {
         "title": "List of frequency of use of a specific word",

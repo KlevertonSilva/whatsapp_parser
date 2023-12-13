@@ -56,6 +56,18 @@
             "z": "Média de mensagens"
         }
     },
+    "Graph_7": {
+        "title": "Comparação da contagem da primeira e da última mensagem por usuário",
+        "labels": {
+            "xaxis_title": "",
+            "yaxis_title": "Quantidade de mensagens",
+            "legend_title": ""
+        },
+        "dataframe_columns": {
+            "first": "Primeira mensagem do dia",
+            "last": "Ultima mensagem do dia"
+        }
+    },
     "Download_excel_button": "Baixar conversa em excel",
     "count_word_occurrences_by_person": {
         "title": "Lista de frequência do uso de uma palavra específica",
