@@ -49,8 +49,7 @@ if uploaded_file is not None:
             start_date = chat.chat_dataframe['date'].min().strftime('%Y-%m-%d')
             end_date = chat.chat_dataframe['date'].max().strftime('%Y-%m-%d')
 
-        if start_date > end_date:
-            st.warning(texts['date_conflict'], icon="⚠️")
+        if start_date > end_date: st.warning(texts['date_conflict'], icon="⚠️")
         else:
             # Activity Heatmap
             fig6 = chat.generate_activity_heatmap(start_date=start_date, end_date=end_date, language=language).update_layout(height=400, width=1000)
@@ -75,10 +74,6 @@ if uploaded_file is not None:
             # Number from type of messages
             fig2 = chat.generate_graph_number_of_types_of_messages(start_date=start_date, end_date=end_date, language=language)
             st.plotly_chart(fig2, theme="streamlit", use_container_width=True)
-
-            # Number from type of messages
-            fig7 = chat.generate_first_last_message(start_date=start_date, end_date=end_date, language=language)
-            st.plotly_chart(fig7, theme="streamlit", use_container_width=True)
 
             # Search word per person
             st.write(texts['count_word_occurrences_by_person']['title'])
