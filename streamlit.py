@@ -52,8 +52,8 @@ if uploaded_file is not None:
         if start_date > end_date: st.warning(texts['date_conflict'], icon="⚠️")
         else:
             # Activity Heatmap
-            fig6 = chat.generate_activity_heatmap(start_date=start_date, end_date=end_date, language=language).update_layout(height=400, width=1000)
-            st.plotly_chart(fig6, theme="streamlit")
+            # fig6 = chat.generate_activity_heatmap(start_date=start_date, end_date=end_date, language=language).update_layout(height=400, width=1000)
+            # st.plotly_chart(fig6, theme="streamlit")
 
             # Number of messages per hour
             fig4 = chat.generate_graph_number_of_messages_per_hour(start_date=start_date, end_date=end_date, language=language)
