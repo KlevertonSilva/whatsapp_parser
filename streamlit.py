@@ -14,6 +14,8 @@ uploaded_file = st.sidebar.file_uploader(texts['select_file'], type=["txt"])
 
 if not uploaded_file:
     st.markdown(texts['markdown'])
+    st.title("Info")
+    st.info(texts['info'])
 
 if uploaded_file is not None:
     # Save the content of the uploaded file to a temporary file
