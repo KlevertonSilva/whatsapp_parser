@@ -26,6 +26,8 @@ if uploaded_file is not None:
 
     # File was uploaded
     if chat:
+        st.markdown(f"""#### {texts['welcome']['group' if chat.group_chat else 'chat']} \n _{chat._folder_name.split('_')[2] if chat.group_chat else texts['welcome']['and'].join(chat.users)}_""")
+
         col1, col2 = st.columns(2)
 
         # Date input for start_date in the first column
