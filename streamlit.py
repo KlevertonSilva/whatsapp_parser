@@ -1,9 +1,12 @@
 from whatsapp_parser.whats_app_parser import WhatsAppParser
 from utils import Utils
 from io import BytesIO
+import matplotlib.pyplot as plt
 import streamlit as st
 import tempfile
 import os
+
+st.set_option('deprecation.showPyplotGlobalUse', False)
 
 language = st.sidebar.selectbox('Language', ('English 🇺🇸', 'Português 🇧🇷'))
 texts = Utils.read_language_files(language)
@@ -51,6 +54,12 @@ if uploaded_file is not None:
 
         if start_date > end_date: st.warning(texts['date_conflict'], icon="⚠️")
         else:
+            st.markdown(f"#### {texts['Wordcloud']}")
+            plt.imshow(chat.generate_word_cloud(), interpolation='bilinear')
+            plt.axis("off")
+            plt.show()
+            st.pyplot()
+
             # Activity Heatmap
             fig6 = chat.generate_activity_heatmap(start_date=start_date, end_date=end_date, language=language).update_layout(height=400, width=1000)
             st.plotly_chart(fig6, theme="streamlit")

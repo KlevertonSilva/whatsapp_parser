@@ -73,12 +73,32 @@ class WhatsAppParser:
 
         # List of words to be removed during text processing
         self.words_to_be_removed = [
-            'mas', 'da', 'meu', 'em',
-            'de', 'ao', 'os', 'que', 'eu',
-            'ma', 'pra', 'para', 'uma',
-            'um', 'Ma', 'e', 'você', 'o',
-            'não', 'sim', 'se', 'mano',
-            'ta', 'tá', 'só', 'é', 'tem'
+            'a', 'ao', 'ainda', 'agora', 'aqui', 'algo', 'aí', 'assim', 'ai', 'até', 'ah',
+            'b',
+            'c', 'como', 'coisa',
+            'd', 'da', 'de', 'deu', 'do', 'dar', 'dos',
+            'e', 'eu', 'estar', 'então', 'está', 'estou', 'eh', 'é', 'em', 'ele', 'ela', 'esse', 'essa', 'estão',
+            'f', 'foi', 'faz',
+            'g',
+            'h', 'https',
+            'i', 'isso', 'ia', 'ir',
+            'j', 'ja', 'já',
+            'k',
+            'l', 'la', 'lá',
+            'm', 'mas', 'mais', 'meu', 'ma', 'Ma', 'muito', 'mim',
+            'n', 'né', 'não', 'nao', 'nós', 'nada', 'na', 'nem',
+            'o', 'os', 'ou',
+            'p', 'pra', 'pro', 'para', 'porque', 'pode', 'por', 'pq', 'porq',
+            'q', 'que', 'quando', 'qual', 'quer',
+            'r',
+            's', 'sim', 'se', 'sobre', 'sabe', 'ser', 'seu', 'só',
+            't', 'ta', 'tá', 'tem', 'tô', 'tudo', 'todos', 'ter', 'te', 'tava',
+            'u', 'uma', 'um',
+            'v', 'vc', 'você', 'voce', 'vou', 'vai', 'ver',
+            'w', 'www',
+            'x',
+            'y',
+            'z'
         ]
         self.weekdays_translation = {
             'Monday': 'Segunda-feira',
@@ -563,16 +583,16 @@ class WhatsAppParser:
         stopwords = set(STOPWORDS)
         stopwords.update(remove_words)
 
-        # Generate word cloud
         wordcloud = WordCloud(stopwords=stopwords,
-                              background_color='black', width=1600,
-                              height=800).generate(all_summary)
+                              background_color='black',
+                              width=1600,
+                              height=800,
+                              colormap='BuGn_r').generate(all_summary)
 
         # Create a plot for the word cloud
         _, ax = plt.subplots(figsize=(16, 8))
         ax.imshow(wordcloud, interpolation='bilinear')
         ax.set_axis_off()
-        plt.imshow(wordcloud)
 
         # Save the word cloud as a PNG file if save_as_file is True
         if not save_as_file: return wordcloud

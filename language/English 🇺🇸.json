@@ -6,6 +6,7 @@
         "chat": "Analyzing the conversation between: ",
         "and": " and "
     },
+    "Wordcloud": "Wordcloud",
     "dataframe_columns": {
         "timestamp": "Date and Time of Sending",
         "who_sended": "Sender",
