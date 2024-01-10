@@ -6,6 +6,12 @@ import streamlit as st
 import tempfile
 import os
 
+st.set_page_config(
+    page_title="WhatsApp Chat Analyzer",
+    page_icon="chart_with_upwards_trend",
+    layout="wide",
+)
+
 st.set_option('deprecation.showPyplotGlobalUse', False)
 
 language = st.sidebar.selectbox('Language', ('English 🇺🇸', 'Português 🇧🇷'))
