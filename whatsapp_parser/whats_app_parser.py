@@ -638,9 +638,6 @@ class WhatsAppParser:
             color_discrete_sequence=group if self.group_chat else not_group
         )
 
-        # Add a black border to the pie chart
-        fig.update_traces(marker=dict(line=dict(color='black', width=2)))
-
         # Save the pie chart as an HTML file if save_as_file is True
         if not save_as_file: return fig
 
