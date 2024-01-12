@@ -74,7 +74,7 @@ class WhatsAppParser:
 
         # List of words to be removed during text processing
         self.words_to_be_removed = [
-            'a', 'ao', 'ainda', 'agora', 'aqui', 'algo', 'aí', 'assim', 'ai', 'até', 'ah',
+            'a', 'ao', 'ainda', 'agora', 'aqui', 'algo', 'aí', 'assim', 'ai', 'até', 'ah', 'audio', 'anexado',
             'b',
             'c', 'como', 'coisa',
             'd', 'da', 'de', 'deu', 'do', 'dar', 'dos', 'dele', 'dela',
@@ -83,13 +83,13 @@ class WhatsAppParser:
             'g',
             'h', 'https',
             'i', 'isso', 'ia', 'ir',
-            'j', 'ja', 'já',
+            'j', 'ja', 'já', 'jpg',
             'k',
             'l', 'la', 'lá',
             'm', 'mas', 'mais', 'meu', 'ma', 'Ma', 'muito', 'mim', 'Mensagem apagada',
             'n', 'né', 'não', 'nao', 'nós', 'nada', 'na', 'nem',
-            'o', 'os', 'ou',
-            'p', 'pra', 'pro', 'para', 'porque', 'pode', 'por', 'pq', 'porq',
+            'o', 'os', 'ou', 'opus',
+            'p', 'pra', 'pro', 'para', 'porque', 'pode', 'por', 'pq', 'porq', 'photo',
             'q', 'que', 'quando', 'qual', 'quer',
             'r',
             's', 'sim', 'se', 'sobre', 'sabe', 'ser', 'seu', 'só', 'sua',
