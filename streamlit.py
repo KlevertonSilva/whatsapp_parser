@@ -8,7 +8,7 @@ import os
 
 st.set_page_config(
     page_title="WhatsApp Chat Analyzer",
-    page_icon="chart_with_upwards_trend",
+    page_icon="large_green_circle",
     layout="wide",
 )
 
