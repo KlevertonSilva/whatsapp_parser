@@ -531,7 +531,7 @@ class WhatsAppParser:
                      color_continuous_scale='Greens')
 
         # Update trace properties and layout
-        fig.update_traces(texttemplate='', textposition='outside')
+        fig.update_traces(texttemplate='', textposition='auto')
 
         fig.update_xaxes(
             showgrid=True,
@@ -543,7 +543,7 @@ class WhatsAppParser:
             ticktext=df_d['hour'].tolist()
         )
 
-        fig.update_layout(uniformtext_minsize=8, uniformtext_mode='hide')
+        fig.update_layout(uniformtext_minsize=10, bargap=0.1)
 
         # Save the graph as an HTML file if save_as_file is True
         if not save_as_file: return fig
