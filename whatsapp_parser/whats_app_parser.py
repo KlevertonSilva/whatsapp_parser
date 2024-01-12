@@ -61,6 +61,7 @@ class WhatsAppParser:
             'main_wpp_4': '#00a884',
             'main_wpp_5': '#ffffff',
             'main_wpp_6': '#202c33',
+            'main_wpp_7': '#285233',
             '# of messages per hour': {
                 '0': '#04020d', '1': '#0a051f', '2': '#0b0524', '3': '#0a0324',
                 '4': '#0a0324', '5': '#17275c', '6': '#5264a1', '7': '#7c8fcc',

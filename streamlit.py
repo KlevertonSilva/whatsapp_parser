@@ -100,7 +100,7 @@ if uploaded_file is not None:
             df.columns = texts['count_word_occurrences_by_person']['columns']
             styler = df.style.bar(subset=texts['count_word_occurrences_by_person']['columns'][1],
                                   align='mid',
-                                  color=chat.hex['main_wpp_1'])
+                                  color=chat.hex['main_wpp_7'])
             st.write(styler.to_html(), unsafe_allow_html=True)
 
             # Structure for excel download
