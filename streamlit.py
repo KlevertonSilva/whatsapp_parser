@@ -20,7 +20,7 @@ st.sidebar.markdown(texts['warning'])
 uploaded_file = st.sidebar.file_uploader(texts['select_file'], type=["txt"])
 
 if not uploaded_file:
-    st.image('/mnt/c/wo_pessoal/whatsapp_parser/wpp_logo.png', width=80)
+    st.image('wpp_logo.png', width=80)
     st.markdown(texts['markdown'])
     st.title("Info")
     st.info(texts['info'])
