@@ -158,7 +158,7 @@ class WhatsAppParser:
                 message_text = match.group('message')
 
                 # In some cases, the first message is the Group name with the cryptography message
-                if c == 0: self.chat_has_group_name = True if message_text in ['criptografia', 'cryptography'] else False
+                if c == 0: self.chat_has_group_name = any(keyword in message_text.lower() for keyword in ['criptografia', 'cryptography'])
 
                 if 'criou este grupo' not in message_text and \
                    'adicionou você' not in message_text:
