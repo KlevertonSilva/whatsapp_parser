@@ -88,7 +88,7 @@ class WhatsAppParser:
             'l', 'la', 'lá',
             'm', 'mas', 'mais', 'meu', 'ma', 'Ma', 'muito', 'mim', 'Mensagem apagada', 'Mensagem',
             'n', 'né', 'não', 'nao', 'nós', 'nada', 'na', 'nem',
-            'o', 'os', 'ou', 'opus',
+            'o', 'os', 'ou', 'opus', 'omitido',
             'p', 'pra', 'pro', 'para', 'porque', 'pode', 'por', 'pq', 'porq', 'photo',
             'q', 'que', 'quando', 'qual', 'quer',
             'r',
