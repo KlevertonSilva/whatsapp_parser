@@ -20,8 +20,6 @@ try:
     st.sidebar.markdown(texts['warning'])
     uploaded_file = st.sidebar.file_uploader(texts['select_file'], type=["txt"])
 
-    st.write(x)
-
     if not uploaded_file:
         st.image('wpp_logo.png', width=80)
         st.markdown(texts['markdown'])
