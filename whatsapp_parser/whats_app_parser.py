@@ -149,13 +149,16 @@ class WhatsAppParser:
         result = {"timestamp": [], "who_sended": [], "message": [], "message_type": []}
 
         # Iterating over messages
-        for message in self.txt_file_list:
+        for c, message in enumerate(self.txt_file_list):
             message = message.replace('\u200e', '').replace('~\u202f', '')
             match = regex.match(message)
 
             # Checking if it's a valid message
             if match:
                 message_text = match.group('message')
+
+                # In some cases, the first message is the Group name with the cryptography message
+                if c == 0: self.chat_has_group_name = True if message_text in ['criptografia', 'cryptography'] else False
 
                 if 'criou este grupo' not in message_text and \
                    'adicionou você' not in message_text:
@@ -277,6 +280,10 @@ class WhatsAppParser:
         self.chat_dataframe['weekday'] = pd.to_datetime(self.chat_dataframe['date']).dt.day_name()
         day_mapping = {"Sunday": 1, "Monday": 2, "Tuesday": 3, "Wednesday": 4, "Thursday": 5, "Friday": 6, "Saturday": 7}
         self.chat_dataframe['weekday_number'] = self.chat_dataframe['weekday'].map(day_mapping)
+
+        if self.chat_has_group_name:
+            rows_to_delete = self.chat_dataframe.loc[0]['who_sended']
+            self.chat_dataframe = self.chat_dataframe[self.chat_dataframe['who_sended'] != rows_to_delete]
 
     def generate_graph_number_of_messages_per_day(self,
                                                   start_date: str = None,
