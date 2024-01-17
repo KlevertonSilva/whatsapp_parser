@@ -278,10 +278,6 @@ class WhatsAppParser:
         day_mapping = {"Sunday": 1, "Monday": 2, "Tuesday": 3, "Wednesday": 4, "Thursday": 5, "Friday": 6, "Saturday": 7}
         self.chat_dataframe['weekday_number'] = self.chat_dataframe['weekday'].map(day_mapping)
 
-        if self.group_chat:
-            rows_to_delete = self.chat_dataframe.loc[0]['who_sended']
-            self.chat_dataframe = self.chat_dataframe[self.chat_dataframe['who_sended'] != rows_to_delete]
-
     def generate_graph_number_of_messages_per_day(self,
                                                   start_date: str = None,
                                                   end_date: str = None,
