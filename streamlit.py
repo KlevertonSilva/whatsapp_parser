@@ -116,5 +116,5 @@ try:
                     key='download_button'
                 )
 except Exception as e:
-    st.info(texts['error_message'])
+    st.write(texts['error_message'])
     st.write(e)
