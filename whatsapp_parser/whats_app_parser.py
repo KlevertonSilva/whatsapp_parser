@@ -143,7 +143,7 @@ class WhatsAppParser:
         """
 
         # Regular expression to extract information
-        regex = re.compile(r"\[(?P<timestamp>\d{2}/\d{2}/\d{4}, \d{2}:\d{2}:\d{2})\] (?P<who_sended>.*?): (?P<message>.*)")
+        regex = re.compile(r"\[(?P<timestamp>[\d\/\,\s:]+)\] (?P<who_sended>.*?): (?P<message>.*?)$")
 
         # Initializing lists in the dictionary
         result = {"timestamp": [], "who_sended": [], "message": [], "message_type": []}
@@ -267,7 +267,8 @@ class WhatsAppParser:
         New columns 'date', 'time', 'hour', and 'weekday' are created based on the 'timestamp' information.
         """
         # Convert 'timestamp' to datetime format
-        self.chat_dataframe['timestamp'] = pd.to_datetime(self.chat_dataframe['timestamp'], format='%d/%m/%Y %H:%M:%S', dayfirst=True)
+        try: self.chat_dataframe['timestamp'] = pd.to_datetime(self.chat_dataframe['timestamp'], format='%d/%m/%Y %H:%M:%S', dayfirst=True)
+        except: self.chat_dataframe['timestamp'] = pd.to_datetime(self.chat_dataframe['timestamp'], format='%y/%m/%d %H:%M:%S', dayfirst=True)
 
         # Extract date, time, hour, and weekday information
         self.chat_dataframe['date'] = self.chat_dataframe['timestamp'].dt.date
