@@ -115,5 +115,6 @@ try:
                     file_name=chat.excel_file_name,
                     key='download_button'
                 )
-except:
-    st.write('teste')
+except Exception as e:
+    st.warning('Eita, não era para isso ter acontecido, pode me ajudar? Envie um email para joaozuco@gmail.com com a mensagem de erro abaixo.')
+    st.write(e)
