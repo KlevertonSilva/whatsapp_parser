@@ -8,18 +8,7 @@
         "chat": "Análisando a conversa entre: ",
         "and": " e "
     },
-    "error_message": [
-        "Olá!",
-        "Se você está vendo esta página, algo inesperado aconteceu durante a análise da sua conversa do WhatsApp. Não se preocupe, estamos aqui para ajudar!",
-        "Para resolver o problema da forma mais eficaz, seria incrível se você pudesse nos enviar alguns detalhes e, se possível, o arquivo que você estava tentando analisar. Claro, isso é totalmente opcional e apenas se você se sentir confortável fazendo isso.",
-        "**Como nos ajudar:**",
-        "1. **Detalhes do Erro:** Descreva o que aconteceu ou copie a mensagem de erro que você viu. Quanto mais informações você puder fornecer, melhor!",
-        "2. **Arquivo de Conversa:** Se estiver se sentindo à vontade, envie o arquivo de conversa do WhatsApp que causou o problema. Isso nos ajudará a entender melhor o cenário.",
-        "3. **Seu Feedback:** Sua opinião é importante para nós! Compartilhe qualquer pensamento ou sugestão que você tenha sobre como podemos melhorar.",
-        "Você pode nos enviar um e-mail para [joaozuco@gmail.com](mailto:joaozuco@gmail.com). Estamos aqui para tornar a sua experiência a melhor possível e agradecemos por sua colaboração!",
-        "Agradecemos por sua compreensão e paciência.",
-        "Atenciosamente, A Equipe do [Nome do Seu Site]"
-      ],
+    "error_message": "Olá!\n\nSe você está vendo esta página, algo inesperado aconteceu durante a análise da sua conversa do WhatsApp. Não se preocupe, estou aqui para ajudar!\n\nPara resolver o problema da forma mais eficaz, seria incrível se você pudesse me enviar alguns detalhes e, se possível, o arquivo que você estava tentando analisar. Claro, isso é totalmente opcional e apenas se você se sentir confortável fazendo isso.\n\n**Como nos ajudar:**\n1. **Detalhes do Erro:** Copie o erro em vermelho abaixo. Quanto mais informações você puder fornecer, melhor!\n2. **Arquivo de Conversa:** Se estiver se sentindo à vontade, envie o arquivo de conversa do WhatsApp que causou o problema. Isso me ajudará a entender melhor o cenário.\n3. **Seu Feedback:** Sua opinião é importante para mim!\n\nVocê pode enviar um e-mail para [joaozuco@gmail.com](mailto:joaozuco@gmail.com). Estou aqui para tornar a sua experiência a melhor possível e agradeço por sua colaboração!\n\nAgradecemos por sua compreensão e paciência.",
     "Wordcloud": "Nuvem de palavras",
     "dataframe_columns": {
         "timestamp": "Data e Hora de Envio",

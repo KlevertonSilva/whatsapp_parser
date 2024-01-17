@@ -8,6 +8,7 @@
         "chat": "Analyzing the conversation between: ",
         "and": " and "
     },
+    "error_message": "Hello!\n\nIf you are seeing this page, something unexpected happened during the analysis of your WhatsApp conversation. Don't worry, I'm here to help!\n\nTo resolve the issue most effectively, it would be incredible if you could send me some details and, if possible, the file you were trying to analyze. Of course, this is entirely optional and only if you feel comfortable doing so.\n\n**How to help me:**\n1. **Error Details:** Copy the error in red below. The more information you can provide, the better!\n2. **Conversation File:** If you're comfortable, send the WhatsApp conversation file that caused the problem. This will help me understand the scenario better.\n3. **Your Feedback:** Your opinion is important to me!\n\nYou can send an email to [joaozuco@gmail.com](mailto:joaozuco@gmail.com). I'm here to make your experience the best possible and appreciate your collaboration!\n\nThank you for your understanding and patience.",
     "Wordcloud": "Wordcloud",
     "dataframe_columns": {
         "timestamp": "Date and Time of Sending",
