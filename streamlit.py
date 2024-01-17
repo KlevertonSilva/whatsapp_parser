@@ -116,5 +116,5 @@ try:
                     key='download_button'
                 )
 except Exception as e:
-    st.warning('Eita, não era para isso ter acontecido, pode me ajudar? Envie um email para joaozuco@gmail.com com a mensagem de erro abaixo.')
+    st.info('Eita, não era para isso ter acontecido, pode me ajudar? Envie um email para joaozuco@gmail.com com a mensagem de erro abaixo.')
     st.write(e)
