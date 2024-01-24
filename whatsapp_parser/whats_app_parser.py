@@ -1,6 +1,7 @@
 from wordcloud import WordCloud, STOPWORDS
 from whatstk import df_from_txt_whatsapp
 import matplotlib.pyplot as plt
+import plotly.graph_objs as go
 from itertools import product
 import plotly_express as px
 from utils import Utils
@@ -692,7 +693,7 @@ class WhatsAppParser:
                                   language: str = 'English 🇺🇸',
                                   start_date: str = None,
                                   end_date: str = None,
-                                  ) -> plotly.graph_objs._figure.Figure:
+                                  ) -> go.Figure:
         """
         Generates an activity heatmap showing the message count per hour of the day and day of the week.
 
@@ -702,17 +703,20 @@ class WhatsAppParser:
         - file_name (str, optional): Name of the HTML file if save_as_file is True.
 
         Returns:
-        - plotly.graph_objs._figure.Figure: The generated activity heatmap.
+        - go.Figure: The generated activity heatmap.
         """
 
         # Set default values for title and file_name if not provided
         texts = Utils.read_language_files(language)
-        if not title: title = texts['Graph_6']['title']
-        if not file_name: file_name = 'Activity Heatmap'
+        if not title:
+            title = texts['Graph_6']['title']
+        if not file_name:
+            file_name = 'Activity Heatmap'
         filtered_df = Utils.check_and_apply_filter_dates(start_date, end_date, self.chat_dataframe)
 
         # Generate all combinations of weekday numbers and hours
-        all_combinations = pd.DataFrame(list(product([1, 2, 3, 4, 5, 6, 7], map(str, range(24)))), columns=['weekday_number', 'hour'])
+        all_combinations = pd.DataFrame(list(product([1, 2, 3, 4, 5, 6, 7], map(str, range(24)))),
+                                        columns=['weekday_number', 'hour'])
         all_combinations['weekday_number'] = all_combinations['weekday_number'].astype(int)
         all_combinations['hour'] = all_combinations['hour'].astype(int)
 
@@ -731,25 +735,22 @@ class WhatsAppParser:
         weekday_mapping = {int(key): value for key, value in weekday_mapping.items()}
         activity_data = pivot_df.rename(index=weekday_mapping)
 
-        # Create the activity heatmap using Plotly Express
-        fig = px.imshow(
-            activity_data.values,
-            labels=dict(x=texts['Graph_6']['labels']['x'],
-                        y=texts['Graph_6']['labels']['y'],
-                        color=texts['Graph_6']['labels']['z'],),
+        # Create the activity heatmap using plotly.graph_objs
+        fig = go.Figure(data=go.Heatmap(
+            z=activity_data.values,
             x=activity_data.columns,
             y=list(range(1, len(activity_data.index) + 1)),  # Convert to list
-            color_continuous_scale='Greens',
-            color_continuous_midpoint=activity_data.median().median(),  # Adjust midpoint as needed
-            title=title
-        )
+            colorscale='Greens',
+            zmin=activity_data.min().min(),  # Adjust min value as needed
+            zmax=activity_data.max().max(),  # Adjust max value as needed
+            colorbar=dict(title=texts['Graph_6']['labels']['z'])
+        ))
 
-        # Update y-axis labels to show day names
-        fig.update_yaxes(tickvals=list(range(1, len(activity_data.index) + 1)),
-                         ticktext=texts['Graph_6']['labels']['weekdays'])
-
-        # Show all annotations
+        # Set the layout parameters
         fig.update_layout(
+            title=title,
+            yaxis=dict(tickvals=list(range(1, len(activity_data.index) + 1)),
+                       ticktext=texts['Graph_6']['labels']['weekdays']),
             annotations=[
                 dict(
                     x=x_val,
@@ -760,17 +761,16 @@ class WhatsAppParser:
                 )
                 for y_val, _ in enumerate(activity_data.index, start=1)  # Start from 1
                 for x_val, _ in enumerate(activity_data.columns)
-            ]
+            ],
+            xaxis=dict(tickvals=list(range(len(activity_data.columns))),
+                       ticktext=activity_data.columns,
+                       categoryorder='array',
+                       categoryarray=activity_data.columns)
         )
 
-        # Update x-axis labels to show all hours
-        fig.update_xaxes(tickvals=list(range(len(activity_data.columns))),
-                         ticktext=activity_data.columns,
-                         categoryorder='array',
-                         categoryarray=activity_data.columns)
-
         # Save the heatmap as an HTML file if save_as_file is True
-        if not save_as_file: return fig
+        if not save_as_file:
+            return fig
 
         self._create_graphs_folder()
         fig.write_html(f"{self._folder_name}/{file_name}.html")
