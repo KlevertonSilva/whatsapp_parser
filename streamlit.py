@@ -39,6 +39,8 @@ try:
 
         # File was uploaded
         if chat:
+            if not chat.chat_downloaded_from_apple_device:
+                st.info(texts['not_from_apple'])
             if not chat.group_chat:
                 st.markdown(f"""#### {texts['welcome']['group' if chat.group_chat else 'chat']} \n _{chat._folder_name.split('_')[2] if chat.group_chat else texts['welcome']['and'].join(chat.users)}_""")
 
@@ -84,16 +86,18 @@ try:
                 st.plotly_chart(fig1, theme="streamlit")
 
                 # Number from type of messages per user
-                fig3 = chat.generate_graph_number_of_types_of_messages_per_user(start_date=start_date, end_date=end_date, language=language)
-                st.plotly_chart(fig3, theme="streamlit", use_container_width=True)
+                if chat.chat_downloaded_from_apple_device:
+                    fig3 = chat.generate_graph_number_of_types_of_messages_per_user(start_date=start_date, end_date=end_date, language=language)
+                    st.plotly_chart(fig3, theme="streamlit", use_container_width=True)
 
                 # Number of messages per user
                 fig5 = chat.generate_number_of_messages_per_user(start_date=start_date, end_date=end_date, language=language)
                 st.plotly_chart(fig5, theme="streamlit", use_container_width=True)
 
                 # Number from type of messages
-                fig2 = chat.generate_graph_number_of_types_of_messages(start_date=start_date, end_date=end_date, language=language)
-                st.plotly_chart(fig2, theme="streamlit", use_container_width=True)
+                if chat.chat_downloaded_from_apple_device:
+                    fig2 = chat.generate_graph_number_of_types_of_messages(start_date=start_date, end_date=end_date, language=language)
+                    st.plotly_chart(fig2, theme="streamlit", use_container_width=True)
 
                 # Search word per person
                 st.write(texts['count_word_occurrences_by_person']['title'])

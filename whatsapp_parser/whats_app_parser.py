@@ -1,4 +1,5 @@
 from wordcloud import WordCloud, STOPWORDS
+from whatstk import df_from_txt_whatsapp
 import matplotlib.pyplot as plt
 from itertools import product
 import plotly_express as px
@@ -23,8 +24,16 @@ class WhatsAppParser:
             # Read the content of the .txt file into a list
             self.txt_file_list = self._txt_file_to_list(txt_file)
 
-        self.chat_dict = self._organize_data_in_dict()
-        self.chat_dataframe = pd.DataFrame(self.chat_dict)  # Create a Pandas DataFrame from the organized chat data
+        # self.chat_dict = self._organize_data_in_dict()
+        # self.chat_dataframe = pd.DataFrame(self.chat_dict)  # Create a Pandas DataFrame from the organized chat data
+
+        self.chat_downloaded_from_apple_device = True if self.txt_file_list[0].replace('\u200e', '').replace('~\u202f', '').startswith("[") else False
+
+        self.chat_dataframe = df_from_txt_whatsapp(txt_file)
+        self.chat_dataframe.rename(columns={
+            'date': 'timestamp',
+            'username': 'who_sended',
+            'message': 'message'}, inplace=True)
 
         # Extract user information from the list of messages
         self.users = list(self.chat_dataframe['who_sended'].unique())
@@ -280,10 +289,37 @@ class WhatsAppParser:
         self.chat_dataframe['weekday'] = pd.to_datetime(self.chat_dataframe['date']).dt.day_name()
         day_mapping = {"Sunday": 1, "Monday": 2, "Tuesday": 3, "Wednesday": 4, "Thursday": 5, "Friday": 6, "Saturday": 7}
         self.chat_dataframe['weekday_number'] = self.chat_dataframe['weekday'].map(day_mapping)
+        self.chat_dataframe['message'] = self.chat_dataframe['message'].str.replace('\u200e', '').str.replace('\u202f', '')
 
-        if self.chat_has_group_name:
-            rows_to_delete = self.chat_dataframe.loc[0]['who_sended']
-            self.chat_dataframe = self.chat_dataframe[self.chat_dataframe['who_sended'] != rows_to_delete]
+        self.chat_is_group = True if self.chat_dataframe['who_sended'].nunique() > 2 else False
+        first_row = self.chat_dataframe.loc[self.chat_dataframe.index[0]]['message']
+
+        if self.chat_is_group:
+            if any(keyword in first_row.lower() for keyword in ['criptografia', 'cryptography']):
+                rows_to_delete = self.chat_dataframe.loc[0]['who_sended']
+                self.chat_dataframe = self.chat_dataframe[self.chat_dataframe['who_sended'] != rows_to_delete]
+
+        self.chat_dataframe['message_type'] = self.chat_dataframe['message'].apply(self._categorize_message)
+
+    def _categorize_message(self, message):
+
+        if self.chat_downloaded_from_apple_device:
+            possible_audio_messages = ['áudio ocultado', 'audio omitted', 'áudio ocultado\n', 'audio omitted\n']
+            possible_video_messages = ['vídeo omitido', 'video omitted', 'vídeo omitido\n', 'video omitted\n']
+            possible_image_messages = ['imagem ocultada', 'image omitted', 'imagem ocultada\n', 'image omitted\n']
+            possible_sticker_messages = ['figurinha omitida', 'sticker omitted', 'figurinha omitida\n', 'sticker omitted\n']
+            possible_gif_messages = ['GIF omitido', 'GIF omitted', 'GIF omitido\n', 'GIF omitted\n']
+
+            if message in possible_audio_messages: return 'Audio'
+            elif message in possible_video_messages: return 'Video'
+            elif message in possible_image_messages: return 'Foto'
+            elif message in possible_sticker_messages: return 'Sticker'
+            elif message in possible_gif_messages: return 'GIF'
+            else: return 'Text'
+
+        else:
+            if message in ['<Mídia oculta>', '<Mídia oculta>\n']: return 'Mídia'
+            else: return 'Text'
 
     def generate_graph_number_of_messages_per_day(self,
                                                   start_date: str = None,
@@ -822,8 +858,6 @@ class WhatsAppParser:
         Returns:
         - pd.DataFrame: A dataframe where the index (username) starts from 1 and values are the number of occurrences of the word.
         """
-        # Ensure 'message' column is of type string
-        self.chat_dataframe['message'] = self.chat_dataframe['message'].astype(str)
 
         # Count occurrences of the word in the 'message' column for each person
         word_counts_by_person = self.chat_dataframe.groupby('who_sended')['message'].apply(lambda x: x.str.lower().str.count(word.lower()).sum())
