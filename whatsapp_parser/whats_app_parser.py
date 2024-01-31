@@ -757,7 +757,7 @@ class WhatsAppParser:
                     y=y_val,
                     text=str(int(activity_data.iloc[y_val - 1, x_val])),  # Convert to int
                     showarrow=False,
-                    font=dict(color='white' if activity_data.iloc[y_val - 1, x_val] > activity_data.median().median() else 'black')
+                    font=dict(color='gray' if activity_data.iloc[y_val - 1, x_val] > activity_data.median().median() else 'black')
                 )
                 for y_val, _ in enumerate(activity_data.index, start=1)  # Start from 1
                 for x_val, _ in enumerate(activity_data.columns)
