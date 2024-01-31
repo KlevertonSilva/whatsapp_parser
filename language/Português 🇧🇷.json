@@ -60,7 +60,7 @@
         "title": "Mapa de atividade de calor",
         "labels": {
             "weekdays": ["Domingo", "Segunda-Feira", "Terça-Feira", "Quarta-Feira", "Quinta-Feira", "Sexta-Feira", "Sabado"],
-            "day_mapping": {"1": "Domingo", "2": "Segunda-Feira", "3": "Terça-Feira", "4": "Quarta-Feira", "5": "Quinta-Feira", "6": "Sexta-Feira", "7": "Sabado"},
+            "day_mapping": {"1": "Monday", "2": "Tuesday", "3": "Wednesday", "4": "Thursday", "5": "Friday", "6": "Saturday", "7": "Sunday"},
             "x": "Dia da semana",
             "y": "Horario",
             "z": "Média de mensagens"

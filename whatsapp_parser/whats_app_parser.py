@@ -288,7 +288,7 @@ class WhatsAppParser:
         self.chat_dataframe['time'] = self.chat_dataframe['timestamp'].dt.time
         self.chat_dataframe['hour'] = self.chat_dataframe['timestamp'].dt.hour
         self.chat_dataframe['weekday'] = pd.to_datetime(self.chat_dataframe['date']).dt.day_name()
-        day_mapping = {"Sunday": 1, "Monday": 2, "Tuesday": 3, "Wednesday": 4, "Thursday": 5, "Friday": 6, "Saturday": 7}
+        day_mapping = {"Monday": 1, "Tuesday": 2, "Wednesday": 3, "Thursday": 4, "Friday": 5, "Saturday": 6, "Sunday": 7}
         self.chat_dataframe['weekday_number'] = self.chat_dataframe['weekday'].map(day_mapping)
         self.chat_dataframe['message'] = self.chat_dataframe['message'].str.replace('\u200e', '').str.replace('\u202f', '')
 
