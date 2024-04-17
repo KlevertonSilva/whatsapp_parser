@@ -28,6 +28,10 @@
             "0": "Date",
             "1": "Who sent",
             "2": "Number of messages"
+        },
+        "button": {
+            "label": "Fill empty days",
+            "help": "Fills days that have no message with value 0"
         }
     },
     "Graph_2": {

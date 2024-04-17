@@ -28,6 +28,10 @@
             "0": "Data",
             "1": "Usuários",
             "2": "Qtd de mensagens"
+        },
+        "button": {
+            "label": "Preencher dias vazios",
+            "help": "Preenche dias que não tem nenhuma mensagem com valor 0"
         }
     },
     "Graph_2": {

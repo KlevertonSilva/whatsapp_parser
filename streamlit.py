@@ -82,7 +82,11 @@ try:
                 st.plotly_chart(fig4, theme="streamlit", use_container_width=True)
 
                 # Number of messages per day
-                fig1 = chat.generate_graph_number_of_messages_per_day(start_date=start_date, end_date=end_date, language=language).update_layout(width=1000)
+                fill_missing = st.checkbox(
+                    value=False,
+                    label=texts['Graph_1']['button']["label"],
+                    help=texts['Graph_1']['button']["help"])
+                fig1 = chat.generate_graph_number_of_messages_per_day(start_date=start_date, end_date=end_date, language=language, fill_missing=fill_missing).update_layout(width=1000)
                 st.plotly_chart(fig1, theme="streamlit")
 
                 # Number from type of messages per user

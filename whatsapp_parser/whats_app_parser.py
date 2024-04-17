@@ -328,7 +328,8 @@ class WhatsAppParser:
                                                   save_as_file: bool = False,
                                                   title: str = None,
                                                   file_name: str = None,
-                                                  language: str = 'English 🇺🇸'
+                                                  language: str = 'English 🇺🇸',
+                                                  fill_missing: bool = False
                                                   ) -> plotly.graph_objs._figure.Figure:
         """
         Generates a line graph showing the number of messages per day within a specified date range.
@@ -339,26 +340,34 @@ class WhatsAppParser:
         - save_as_file (bool, optional): If True, saves the graph as an HTML file.
         - title (str, optional): Title of the graph.
         - file_name (str, optional): Name of the HTML file if save_as_file is True.
+        - fill_missing (bool, optional): If True, fills missing days with 0 messages for each user.
 
         Returns:
         - plotly.graph_objs._figure.Figure: The generated line graph.
         """
 
-        # Set default values for title and file_name if not provided
         texts = Utils.read_language_files(language)
         if not title: title = texts['Graph_1']['title']
         if not file_name: file_name = '# of messages per day'
+
         filtered_df = Utils.check_and_apply_filter_dates(start_date, end_date, self.chat_dataframe)
+        chat_df_grouped = filtered_df.groupby(by=["date", "who_sended"], sort=False).count()['message'].reset_index()
 
-        # Group filtered chat DataFrame by date and sender, count the number of messages
-        chat_df_grouped = filtered_df.groupby(by=["date", "who_sended"], sort=False).count()['message']
-        chat_df_grouped = chat_df_grouped.reset_index(drop=False)
-        chat_df_grouped = pd.DataFrame(chat_df_grouped)
+        if fill_missing:
+            # Generate a DataFrame with all dates within the range for each sender
+            all_dates = pd.date_range(start=start_date, end=end_date).to_series(name='date')
+            all_senders = pd.Series(filtered_df['who_sended'].unique(), name='who_sended')
+            complete_df = pd.MultiIndex.from_product([all_dates, all_senders], names=['date', 'who_sended']).to_frame(index=False)
 
-        # Get a new order for dates
-        new_order = list(chat_df_grouped['date'].unique())
+            # Convert 'date' columns to datetime
+            complete_df['date'] = pd.to_datetime(complete_df['date'])
+            chat_df_grouped['date'] = pd.to_datetime(chat_df_grouped['date'])
 
-        # Create a line graph using plotly express
+            # Merge and fill missing messages with 0
+            complete_df = pd.merge(complete_df, chat_df_grouped, how='left', on=['date', 'who_sended'])
+            complete_df['message'] = complete_df['message'].fillna(0)
+            chat_df_grouped = complete_df
+
         fig = px.line(chat_df_grouped, x='date', y="message",
                       title=title,
                       labels={
@@ -366,20 +375,18 @@ class WhatsAppParser:
                           'who_sended': texts['Graph_1']['labels']["1"],
                           'message': texts['Graph_1']['labels']["2"],
                       },
-                      category_orders={'date': new_order},
                       color='who_sended',
                       color_discrete_sequence=[self.hex[f'main_wpp_{i}'] for i in range(1, 6)])
 
-        # Set line colors and update layout
         if not self.group_chat:
             fig['data'][1]['line']['color'] = self.hex['main_wpp_1']
             fig['data'][0]['line']['color'] = self.hex['main_wpp_5']
 
-        # Save the graph as an HTML file if save_as_file is True
-        if not save_as_file: return fig
+        if save_as_file:
+            self._create_graphs_folder()
+            fig.write_html(f"{self._folder_name}/{file_name}.html")
 
-        self._create_graphs_folder()
-        fig.write_html(f"{self._folder_name}/{file_name}.html")
+        return fig
 
     def generate_graph_number_of_types_of_messages(self,
                                                    save_as_file: bool = False,
