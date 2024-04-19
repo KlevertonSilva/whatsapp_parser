@@ -68,6 +68,11 @@
             "x": "Dia da semana",
             "y": "Horario",
             "z": "Média de mensagens"
+        },
+        "hover": {
+            "x": "Horário",
+            "y": "Dia",
+            "z": "Média de mensagens"
         }
     },
     "Graph_7": {

@@ -68,6 +68,11 @@
             "x": "Hour",
             "y": "Weekday",
             "z": "Number of messages"
+        },
+        "hover": {
+            "x": "Hour",
+            "y": "Day",
+            "z": "Mean"
         }
     },
     "Graph_7": {

@@ -748,12 +748,12 @@ class WhatsAppParser:
             x=activity_data.columns,
             y=list(range(1, len(activity_data.index) + 1)),  # Convert to list
             colorscale='Greens',
-            zmin=activity_data.min().min(),  # Adjust min value as needed
-            zmax=activity_data.max().max(),  # Adjust max value as needed
-            colorbar=dict(title=texts['Graph_6']['labels']['z'])
+            zmin=activity_data.min().min(),
+            zmax=activity_data.max().max(),
+            colorbar=dict(title=texts['Graph_6']['labels']['z']),
+            hovertemplate=f"<b>{texts['Graph_6']['hover']['x']}:</b> %{{x}}<br><b>{texts['Graph_6']['hover']['y']}:</b> %{{y}}<br><b>{texts['Graph_6']['hover']['z']}:</b> %{{z}}<extra></extra>"
         ))
 
-        # Set the layout parameters
         fig.update_layout(
             title=title,
             yaxis=dict(tickvals=list(range(1, len(activity_data.index) + 1)),
