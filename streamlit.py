@@ -15,7 +15,7 @@ try:
 
     st.set_option('deprecation.showPyplotGlobalUse', False)
 
-    language = st.sidebar.selectbox('Lang', ('Português 🇧🇷', 'English 🇺🇸'))
+    language = st.sidebar.selectbox('Language', ('Português 🇧🇷', 'English 🇺🇸'))
     texts = Utils.read_language_files(language)
     st.sidebar.markdown(texts['warning'])
     uploaded_file = st.sidebar.file_uploader(texts['select_file'], type=["txt"])
