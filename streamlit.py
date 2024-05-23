@@ -32,6 +32,8 @@ try:
         temp_file_path = temp_file.name
         temp_file.close()
 
+        Utils.encrypt_file(temp_file_path)
+        Utils.decrypt_file(temp_file_path)
         chat = WhatsAppParser(temp_file_path)
 
         # Clean up the temporary file
