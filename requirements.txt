@@ -20,7 +20,7 @@ jsonschema-specifications==2023.12.1
 kiwisolver==1.4.5
 markdown-it-py==3.0.0
 MarkupSafe==2.1.5
-matplotlib==3.7.1
+matplotlib==3.7.3
 mdurl==0.1.2
 numpy==1.24.4
 packaging==24.0
@@ -41,7 +41,7 @@ referencing==0.34.0
 requests==2.31.0
 rich==13.7.1
 rpds-py==0.18.0
-scipy==1.13.0
+scipy==1.10.1
 seaborn==0.12.2
 six==1.16.0
 smmap==5.0.1
