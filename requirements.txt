@@ -45,7 +45,7 @@ scipy==1.10.1
 seaborn==0.12.2
 six==1.16.0
 smmap==5.0.1
-statsmodels==0.14.2
+statsmodels==0.13.5
 streamlit==1.33.0
 tenacity==8.2.3
 toml==0.10.2
