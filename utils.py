@@ -2,6 +2,7 @@ import json
 from datetime import datetime
 import pandas as pd
 from cryptography.fernet import Fernet
+import os
 
 
 class Utils:
@@ -11,11 +12,13 @@ class Utils:
     @staticmethod
     def generate_and_store_key():
         """Generate a key for encryption and store it securely."""
-        Utils._key = Fernet.generate_key()
-        Utils._cipher_suite = Fernet(Utils._key)
-        # Store the key securely (e.g., in an environment variable or secure storage)
-        with open('secret.key', 'wb') as key_file:
-            key_file.write(Utils._key)
+        if not os.path.exists('secret.key'):
+            Utils._key = Fernet.generate_key()
+            with open('secret.key', 'wb') as key_file:
+                key_file.write(Utils._key)
+            Utils._cipher_suite = Fernet(Utils._key)
+        else:
+            Utils.load_key()
 
     @staticmethod
     def load_key():
@@ -50,17 +53,26 @@ class Utils:
     @staticmethod
     def encrypt_file(file_path):
         Utils.load_key()
-        with open(file_path, 'rb') as file:
-            file_data = file.read()
-        encrypted_data = Utils._cipher_suite.encrypt(file_data)
-        with open(file_path, 'wb') as file:
-            file.write(encrypted_data)
+        if Utils._cipher_suite:
+            with open(file_path, 'rb') as file:
+                file_data = file.read()
+            encrypted_data = Utils._cipher_suite.encrypt(file_data)
+            with open(file_path, 'wb') as file:
+                file.write(encrypted_data)
+        else:
+            raise ValueError("Encryption key not loaded.")
 
     @staticmethod
     def decrypt_file(file_path):
         Utils.load_key()
-        with open(file_path, 'rb') as file:
-            encrypted_data = file.read()
-        decrypted_data = Utils._cipher_suite.decrypt(encrypted_data)
-        with open(file_path, 'wb') as file:
-            file.write(decrypted_data)
+        if Utils._cipher_suite:
+            with open(file_path, 'rb') as file:
+                encrypted_data = file.read()
+            decrypted_data = Utils._cipher_suite.decrypt(encrypted_data)
+            with open(file_path, 'wb') as file:
+                file.write(decrypted_data)
+        else:
+            raise ValueError("Encryption key not loaded.")
+
+
+Utils.generate_and_store_key()

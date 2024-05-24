@@ -20,6 +20,9 @@ try:
     uploaded_file = st.sidebar.file_uploader(texts['select_file'], type=["txt"])
     st.sidebar.markdown(texts['warning'])
 
+    # Garanta que a chave seja gerada e armazenada
+    Utils.generate_and_store_key()
+
     if not uploaded_file:
         st.image('wpp_logo.png', width=80)
         st.markdown(texts['markdown'])
@@ -122,9 +125,9 @@ try:
                 st.sidebar.download_button(
                     label=texts['Download_excel_button'],
                     data=excel_buffer.read(),
-                    file_name=chat.excel_file_name,
-                    key='download_button'
+                    file_name='chat_analysis.xlsx',
+                    mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
                 )
+
 except Exception as e:
-    st.info(texts['error_message'])
-    st.write(e)
+    st.error(f"An error occurred: {e}")
