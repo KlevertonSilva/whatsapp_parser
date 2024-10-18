@@ -747,7 +747,7 @@ class WhatsAppParser:
             z=pivot_df.values,
             x=pivot_df.columns,
             y=pivot_df.index,
-            colorscale='Greens',
+            colorscale='Greens',  # Mantendo a paleta de cores Greens
             zmin=0,
             zmax=pivot_df.values.max(),
             colorbar=dict(title=texts['Graph_6']['labels'].get('z', 'Message Count')),
@@ -770,7 +770,7 @@ class WhatsAppParser:
                         text=str(int(value)),  # Convert the value to an integer string
                         showarrow=False,
                         font=dict(
-                            color='white' if value > pivot_df.values.mean() else 'black'
+                            color='white' if value > (pivot_df.values.max() * 0.3) else 'black'  # Aumentando o limite para melhor visibilidade dos valores baixos
                         )
                     )
                 )
