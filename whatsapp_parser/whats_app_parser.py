@@ -722,7 +722,7 @@ class WhatsAppParser:
         filtered_df = Utils.check_and_apply_filter_dates(start_date, end_date, self.chat_dataframe)
 
         # Generate all combinations of weekday numbers and hours
-        all_combinations = pd.DataFrame(list(product([1, 2, 3, 4, 5, 6, 7], map(str, range(24)))),
+        all_combinations = pd.DataFrame(list(product(range(7), range(24))),
                                         columns=['weekday_number', 'hour'])
         all_combinations['weekday_number'] = all_combinations['weekday_number'].astype(int)
         all_combinations['hour'] = all_combinations['hour'].astype(int)
@@ -735,52 +735,68 @@ class WhatsAppParser:
         result.sort_values(by=['weekday_number', 'hour'], ascending=[True, True], inplace=True)
 
         # Pivot the result to create a table with rows as weekday numbers, columns as hours, and values as message counts
-        pivot_df = result.pivot_table(values='message_count', index='weekday_number', columns='hour', aggfunc='mean')
+        pivot_df = result.pivot(index='weekday_number', columns='hour', values='message_count')
 
-        # Map weekday numbers to weekday names using a dictionary
-        weekday_mapping = texts['Graph_6']['labels']['day_mapping']
-        weekday_mapping = {int(key): value for key, value in weekday_mapping.items()}
-        activity_data = pivot_df.rename(index=weekday_mapping)
+        # Verifica o idioma e faz o mapeamento dos dias da semana de acordo
+        weekdays = texts['Graph_6']['labels']['weekdays']
+        weekday_mapping = {i: weekdays[i] for i in range(7)}
+        pivot_df.index = pivot_df.index.map(weekday_mapping)
 
         # Create the activity heatmap using plotly.graph_objs
         fig = go.Figure(data=go.Heatmap(
-            z=activity_data.values,
-            x=activity_data.columns,
-            y=list(range(1, len(activity_data.index) + 1)),  # Convert to list
+            z=pivot_df.values,
+            x=pivot_df.columns,
+            y=pivot_df.index,
             colorscale='Greens',
-            zmin=activity_data.min().min(),
-            zmax=activity_data.max().max(),
-            colorbar=dict(title=texts['Graph_6']['labels']['z']),
-            hovertemplate=f"<b>{texts['Graph_6']['hover']['x']}:</b> %{{x}}<br><b>{texts['Graph_6']['hover']['y']}:</b> %{{y}}<br><b>{texts['Graph_6']['hover']['z']}:</b> %{{z}}<extra></extra>"
+            zmin=0,
+            zmax=pivot_df.values.max(),
+            colorbar=dict(title=texts['Graph_6']['labels'].get('z', 'Message Count')),
+            hovertemplate=(
+                f"<b>{texts['Graph_6']['hover'].get('x', 'Hour')}:</b> %{{x}}<br>"
+                f"<b>{texts['Graph_6']['hover'].get('y', 'Day')}:</b> %{{y}}<br>"
+                f"<b>{texts['Graph_6']['hover'].get('z', 'Message Count')}:</b> %{{z}}<extra></extra>"
+            )
         ))
+
+        # Add annotations to each cell with the message count value
+        annotations = []
+        for i, weekday in enumerate(pivot_df.index):
+            for j, hour in enumerate(pivot_df.columns):
+                value = pivot_df.iloc[i, j]
+                annotations.append(
+                    dict(
+                        x=hour,
+                        y=weekday,
+                        text=str(int(value)),  # Convert the value to an integer string
+                        showarrow=False,
+                        font=dict(
+                            color='white' if value > pivot_df.values.mean() else 'black'
+                        )
+                    )
+                )
 
         fig.update_layout(
             title=title,
-            yaxis=dict(tickvals=list(range(1, len(activity_data.index) + 1)),
-                       ticktext=texts['Graph_6']['labels']['weekdays']),
-            annotations=[
-                dict(
-                    x=x_val,
-                    y=y_val,
-                    text=str(int(activity_data.iloc[y_val - 1, x_val])),  # Convert to int
-                    showarrow=False,
-                    font=dict(color='white' if activity_data.iloc[y_val - 1, x_val] > activity_data.median().median() else 'black')
-                )
-                for y_val, _ in enumerate(activity_data.index, start=1)  # Start from 1
-                for x_val, _ in enumerate(activity_data.columns)
-            ],
-            xaxis=dict(tickvals=list(range(len(activity_data.columns))),
-                       ticktext=activity_data.columns,
-                       categoryorder='array',
-                       categoryarray=activity_data.columns)
+            yaxis=dict(
+                tickmode='array',
+                tickvals=list(pivot_df.index),
+                ticktext=list(pivot_df.index),
+                title=texts['Graph_6']['labels'].get('y', 'Weekday')
+            ),
+            xaxis=dict(
+                tickmode='array',
+                tickvals=list(pivot_df.columns),
+                title=texts['Graph_6']['labels'].get('x', 'Hour of Day')
+            ),
+            annotations=annotations
         )
 
         # Save the heatmap as an HTML file if save_as_file is True
-        if not save_as_file:
-            return fig
+        if save_as_file:
+            self._create_graphs_folder()
+            fig.write_html(f"{self._folder_name}/{file_name}.html")
 
-        self._create_graphs_folder()
-        fig.write_html(f"{self._folder_name}/{file_name}.html")
+        return fig
 
     def generate_first_last_message(self,
                                     save_as_file: bool = False,
