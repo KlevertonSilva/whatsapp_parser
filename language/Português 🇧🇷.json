@@ -1,7 +1,7 @@
 {
-    "warning": "> ⚠️ Este aplicativo não possui conexão com nenhum banco de dados, portanto, seu chat não será armazenado em nenhum lugar. Além disso, todas as mensagens trocadas no chat são criptografadas para garantir a segurança e a privacidade dos dados.",
+    "warning": "",
     "markdown": "## Analisador de Conversas do WhatsApp\nEsta ferramenta permite visualizar e analisar suas conversas do WhatsApp. Para começar, siga estas etapas:\n\n1. **Exportar Conversa do WhatsApp:**\n   - Abra a conversa do WhatsApp com o contato ou grupo que deseja analisar.\n   - Toque nos três pontos no canto superior direito.\n   - Selecione \"Mais\" > \"Exportar conversa\".\n   - Escolha \"Sem mídia\" para exportar apenas as mensagens de texto.\n---\n2. **Enviar Arquivo da Conversa:**\n   - Use a barra lateral à esquerda para enviar o arquivo de conversa exportado.\n   - Clique em \"Escolher um arquivo .txt\" e selecione o arquivo de texto exportado.\n---\n3. **Selecionar Intervalo de Datas:**\n   - Use as entradas de data na barra lateral para selecionar o intervalo de datas para análise.\n   - Escolha as datas de início e fim usando os seletores de data fornecidos.\n---\n4. **Visualizar Sua Conversa:**\n   - A ferramenta gerará visualizações com base no intervalo de datas selecionado.\n---\n**Observação:** Certifique-se de enviar o arquivo de conversa exportado no formato .txt sem mídia. Se tiver algum problema ou dúvida, não hesite em entrar em contato.\n\nAproveite a análise de sua conversa no WhatsApp!",
-    "info": "Este é um aplicativo Streamlit criado por João Pedro Martins Longo Zucoloto.\n\nLinkedin: https://www.linkedin.com/in/jo%C3%A3o-pedro-longo-zucoloto-169638182\n\nGithub: https://github.com/PepeZuco\n\nSe houver algum feedback ou alguma ideia para o aplicativo, entre em contato comigo em: joaozuco@gmail.com",
+    "info": "",
     "select_file": "Escolha um arquivo .txt",
     "welcome": {
         "group": "Análisando o grupo: ",
